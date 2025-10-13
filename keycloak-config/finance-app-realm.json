@@ -1,0 +1,155 @@
+{
+  "realm": "finance-app",
+  "enabled": true,
+  "displayName": "Finance Application",
+  "accessTokenLifespan": 300,
+  "refreshTokenMaxReuse": 0,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "accessCodeLifespan": 60,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "rememberMe": false,
+  "verifyEmail": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "default-roles-finance-app",
+        "description": "Default roles for finance-app",
+        "composite": true,
+        "composites": {
+          "realm": ["offline_access", "uma_authorization"]
+        }
+      },
+      {
+        "name": "offline_access",
+        "description": "Offline access",
+        "composite": false
+      },
+      {
+        "name": "uma_authorization", 
+        "description": "UMA authorization",
+        "composite": false
+      },
+      {
+        "name": "finance-user",
+        "description": "Can access finance data",
+        "composite": false
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "testuser",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Test",
+      "lastName": "User", 
+      "email": "test@example.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "testpass123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["default-roles-finance-app", "finance-user"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "finance-client",
+      "name": "Finance Application Client",
+      "description": "Client for Finance Application with JWT assertion",
+      "enabled": true,
+      "clientAuthenticatorType": "client-jwt",
+      "redirectUris": [
+        "http://localhost:3000/callback",
+        "http://localhost:8081/token",
+        "http://localhost:8081/callback", 
+        "https://oauth.pstmn.io/v1/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:8081",
+        "https://oauth.pstmn.io",
+        "http://localhost:3000"
+      ],
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "token.endpoint.auth.signing.alg": "RS256",
+        "use.jwks.url": "false",
+        "jwt.credential.certificate": ""
+      },
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr", 
+        "roles",
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone", 
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "clientId": "finance-api-server",
+      "name": "Finance API Resource Server", 
+      "description": "Resource server for Finance API",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "bearerOnly": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "webOrigins": ["http://localhost:8082"],
+      "fullScopeAllowed": true
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "finance-api",
+      "description": "Access to finance API",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true"
+      }
+    }
+  ],
+  "defaultDefaultClientScopes": [
+    "profile",
+    "email",
+    "roles",
+    "web-origins",
+    "acr"
+  ],
+  "browserSecurityHeaders": {
+    "contentSecurityPolicyReportOnly": "",
+    "xContentTypeOptions": "nosniff",
+    "xFrameOptions": "SAMEORIGIN",
+    "xXSSProtection": "1; mode=block"
+  },
+  "browserFlow": "browser",
+  "directGrantFlow": "direct grant", 
+  "clientAuthenticationFlow": "clients"
+}
