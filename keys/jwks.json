@@ -2,15 +2,11 @@
   "keys": [
     {
       "kty": "RSA",
-      "use": "sig", 
+      "use": "sig",
       "kid": "finance-client-key",
-      "n": "yVuDiMmmqMbRZcPNQeq32go5dGcF1oDupHU4QopAXibeKKGssmFRxXXuewqL7PDLmKHym0_h4U6i
-LkmIv7tt7g_GYsAg6-hvQ5d0WfGdQgGlFtm77c6a9cRe6CWSkMmqn-7OmAR5y4EV2OctyZDbvWoz
-i5CwPiKmqPU-Y0ytiEqNq-9vsDaGvIBA2nP1CRNyaWBGfOSebyvnelWHmBEiOSxbmUGm5sUkfzFm
-ZHDKqtUwYt9-d9FyGXP5InTqAEQ3l0-W_kZoxMijtUF6v-ZaON--BNsFLlZxe4JVp2ZLKH6UTd2a
-r2xwZzMJW1ULkZrCNdKyMs8LIODf_zP-cdfnzw",
-      "e": "AQAB",
-      "alg": "RS256"
+      "alg": "RS256",
+      "n": "yVuDiMmmqMbRZcPNQeq32go5dGcF1oDupHU4QopAXibeKKGssmFRxXXuewqL7PDLmKHym0_h4U6iLkmIv7tt7g_GYsAg6-hvQ5d0WfGdQgGlFtm77c6a9cRe6CWSkMmqn-7OmAR5y4EV2OctyZDbvWozi5CwPiKmqPU-Y0ytiEqNq-9vsDaGvIBA2nP1CRNyaWBGfOSebyvnelWHmBEiOSxbmUGm5sUkfzFmZHDKqtUwYt9-d9FyGXP5InTqAEQ3l0-W_kZoxMijtUF6v-ZaON--BNsFLlZxe4JVp2ZLKH6UTd2ar2xwZzMJW1ULkZrCNdKyMs8LIODf_zP-cdfnzw",
+      "e": "AQAB"
     }
   ]
 }

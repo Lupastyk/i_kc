@@ -15,6 +15,9 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
 
+    implementation("io.quarkus:quarkus-smallrye-jwt")
+    implementation("io.quarkus:quarkus-smallrye-jwt-build")
+
     implementation("org.apache.camel.quarkus:camel-quarkus-direct")
     implementation("org.apache.camel.quarkus:camel-quarkus-core")
     implementation("org.apache.camel.quarkus:camel-quarkus-rest")
@@ -24,6 +27,7 @@ dependencies {
     implementation("org.apache.camel.quarkus:camel-quarkus-kafka")
     implementation("org.apache.camel.quarkus:camel-quarkus-openapi-java")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
+
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")

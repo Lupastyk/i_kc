@@ -1,4 +1,3 @@
-// token-service/src/main/kotlin/com/finance/token/processors/JwtClaimsProcessor.kt
 package com.finance.token.processors
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
