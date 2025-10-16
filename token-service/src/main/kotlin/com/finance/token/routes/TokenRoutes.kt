@@ -59,7 +59,6 @@ open class TokenRoutes(
             .to("direct:tokenFlow")
 
         from("direct:tokenFlow")
-            // достаём code (без Simple)
             .process { ex ->
                 val codeFromHeader = ex.message.getHeader("code", String::class.java)
                 val rawQuery = ex.message.getHeader(Exchange.HTTP_QUERY, String::class.java)
@@ -90,7 +89,6 @@ open class TokenRoutes(
             .stop()
             .end()
 
-            // Keycloak: формируем тело запроса (client_secret ИЛИ private_key_jwt)
             .removeHeaders("*")
             .setHeader(Exchange.CONTENT_TYPE).constant("application/x-www-form-urlencoded")
 

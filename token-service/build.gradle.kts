@@ -14,6 +14,7 @@ dependencies {
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
+    implementation("io.quarkus:quarkus-jackson")
 
     implementation("io.quarkus:quarkus-smallrye-jwt")
     implementation("io.quarkus:quarkus-smallrye-jwt-build")
@@ -26,7 +27,9 @@ dependencies {
     implementation("org.apache.camel.quarkus:camel-quarkus-jackson")
     implementation("org.apache.camel.quarkus:camel-quarkus-kafka")
     implementation("org.apache.camel.quarkus:camel-quarkus-openapi-java")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation(kotlin("reflect"))
 
 
     testImplementation("io.quarkus:quarkus-junit5")

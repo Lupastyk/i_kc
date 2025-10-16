@@ -46,7 +46,7 @@ class ClientAssertionTest {
         jws.key = pubKey
 
         val consumer = JwtConsumerBuilder()
-            .setSkipDefaultAudienceValidation() // аудиторию проверим сами
+            .setSkipDefaultAudienceValidation()
             .setVerificationKey(pubKey)
             .setRequireSubject()
             .setRequireExpirationTime()
@@ -54,10 +54,10 @@ class ClientAssertionTest {
 
         val claims = consumer.processToClaims(jwt)
 
-        assertEquals(clientId, claims.issuer)             // iss
-        assertEquals(clientId, claims.subject)            // sub
-        assertEquals(listOf(tokenUrl), claims.audience)   // aud
-        assertNotNull(claims.getClaimValue("jti"))        // jti присутствует
+        assertEquals(clientId, claims.issuer)
+        assertEquals(clientId, claims.subject)
+        assertEquals(listOf(tokenUrl), claims.audience)
+        assertNotNull(claims.getClaimValue("jti"))
         assertTrue(claims.expirationTime.valueInMillis > System.currentTimeMillis())
     }
 

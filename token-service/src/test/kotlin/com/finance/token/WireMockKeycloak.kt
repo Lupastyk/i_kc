@@ -14,7 +14,6 @@ class WireMockKeycloak : QuarkusTestResourceLifecycleManager {
 
         val tokenPath = "/realms/finance-app/protocol/openid-connect/token"
 
-        // Вариант 1: client_secret
         server.stubFor(
             post(urlPathEqualTo(tokenPath))
                 .withHeader("Content-Type", containing("application/x-www-form-urlencoded"))
@@ -22,7 +21,6 @@ class WireMockKeycloak : QuarkusTestResourceLifecycleManager {
                 .withRequestBody(containing("code=AUTH_CODE"))
                 .withRequestBody(containing("client_id=finance-client"))
                 .withRequestBody(containing("redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Ftoken"))
-                // есть client_secret (порядок параметров неважен)
                 .withRequestBody(matching(".*(?:^|&)client_secret=[^&=]+.*"))
                 .willReturn(
                     aResponse()
@@ -32,7 +30,6 @@ class WireMockKeycloak : QuarkusTestResourceLifecycleManager {
                 )
         )
 
-        // Вариант 2: private_key_jwt (оба параметра обязательны)
         server.stubFor(
             post(urlPathEqualTo(tokenPath))
                 .withHeader("Content-Type", containing("application/x-www-form-urlencoded"))
