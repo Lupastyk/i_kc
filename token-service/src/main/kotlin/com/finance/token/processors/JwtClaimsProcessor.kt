@@ -2,6 +2,7 @@ package com.finance.token.processors
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.finance.token.model.UserClaims
+import jakarta.inject.Named
 import jakarta.inject.Singleton
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 @Singleton
+@Named("jwtClaimsProcessor")
 class JwtClaimsProcessor : Processor {
 
     private val mapper = jacksonObjectMapper()
