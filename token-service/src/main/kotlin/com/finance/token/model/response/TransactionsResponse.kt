@@ -1,6 +1,7 @@
-package com.finance.token.model
+package com.finance.token.model.response
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.finance.token.model.Transaction
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TransactionsResponse(

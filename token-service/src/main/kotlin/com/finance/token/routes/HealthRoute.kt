@@ -1,6 +1,6 @@
 package com.finance.token.routes
 
-import com.finance.token.model.HealthResponse
+import com.finance.token.model.response.HealthResponse
 import com.finance.token.model.HealthStatus
 import jakarta.enterprise.context.ApplicationScoped
 import org.apache.camel.Exchange

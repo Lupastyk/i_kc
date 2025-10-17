@@ -1,7 +1,7 @@
 package com.finance.token.routes
 
-import com.finance.token.model.TokenResponse
-import com.finance.token.model.TransactionsResponse
+import com.finance.token.model.response.TokenResponse
+import com.finance.token.model.response.TransactionsResponse
 import jakarta.enterprise.context.ApplicationScoped
 import org.apache.camel.Exchange
 import org.apache.camel.builder.Builder

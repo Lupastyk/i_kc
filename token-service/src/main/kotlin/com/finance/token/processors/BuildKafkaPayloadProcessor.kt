@@ -1,9 +1,8 @@
 package com.finance.token.processors
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.finance.token.model.TransactionsResponse
-import com.finance.token.model.UserAndTransactions
+import com.finance.token.model.UserAndTransactionsPayload
 import com.finance.token.model.UserClaims
+import com.finance.token.model.response.TransactionsResponse
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
@@ -12,7 +11,7 @@ import org.apache.camel.Processor
 
 @ApplicationScoped
 @Named("buildKafkaPayload")
-class BuildKafkaPayload @Inject constructor(
+class BuildKafkaPayloadProcessor @Inject constructor(
 ) : Processor {
 
     override fun process(exchange: Exchange) {
@@ -25,6 +24,6 @@ class BuildKafkaPayload @Inject constructor(
                 ?: userClaims.preferredUsername
                 ?: throw IllegalStateException("Cannot find userId")
 
-        exchange.setProperty("kafkaPayload", UserAndTransactions(userId, userClaims, txResp.transactions))
+        exchange.setProperty("kafkaPayload", UserAndTransactionsPayload(userId, userClaims, txResp.transactions))
     }
 }

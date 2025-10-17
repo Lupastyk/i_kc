@@ -9,7 +9,6 @@ import java.time.Instant
 import java.util.*
 
 class ClientAssertionTest {
-
     val privatePem = readResource("/keys/private_key.pem")
     val publicPem = readResource("/keys/public_key.pem")
 
@@ -35,6 +34,7 @@ class ClientAssertionTest {
 
     @Test
     fun `builds signed client assertion with required claims`() {
+        //given
         val clientId = "finance-client"
         val tokenUrl = "http://localhost:8080/realms/finance-app/protocol/openid-connect/token"
 
@@ -51,9 +51,9 @@ class ClientAssertionTest {
             .setRequireSubject()
             .setRequireExpirationTime()
             .build()
-
+        //when
         val claims = consumer.processToClaims(jwt)
-
+        //then
         assertEquals(clientId, claims.issuer)
         assertEquals(clientId, claims.subject)
         assertEquals(listOf(tokenUrl), claims.audience)

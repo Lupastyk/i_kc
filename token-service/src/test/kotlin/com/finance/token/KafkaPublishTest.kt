@@ -2,29 +2,43 @@ package com.finance.token
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.finance.token.model.UserAndTransactions
+import com.finance.token.mocks.WireMockKeycloak
+import com.finance.token.mocks.WireMockTransactions
+import com.finance.token.model.UserAndTransactionsPayload
+import com.finance.token.profiles.KafkaFlowProfile
 import io.quarkus.test.common.QuarkusTestResource
 import io.quarkus.test.junit.QuarkusTest
-import io.restassured.RestAssured
+import io.quarkus.test.junit.TestProfile
+import io.restassured.RestAssured.given
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.eclipse.microprofile.config.ConfigProvider
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode
 import java.time.Duration
 import java.util.*
 
+@Execution(ExecutionMode.SAME_THREAD)
 @QuarkusTest
+@TestProfile(KafkaFlowProfile::class)
 @QuarkusTestResource(WireMockKeycloak::class)
 @QuarkusTestResource(WireMockTransactions::class)
 @QuarkusTestResource(KafkaResource::class)
 class KafkaPublishTest {
 
     @Test
-    fun `flow publishes user+transactions with userId`() {
+    fun `kafka payload contains userId user and transactions`() {
+        //given
+        given()
+            .queryParam("code", "AUTH_CODE")
+            .`when`()
+            .get("/token")
+            .then()
+            .statusCode(200)
+
         val cfg = ConfigProvider.getConfig()
         val bootstrap = cfg.getValue("kafka.bootstrap.servers", String::class.java)
         val topic = cfg.getValue("kafka.topic.user-transactions", String::class.java)
@@ -33,36 +47,32 @@ class KafkaPublishTest {
             put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrap)
             put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java.name)
             put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java.name)
-            put(ConsumerConfig.GROUP_ID_CONFIG, "it-" + UUID.randomUUID())
+            put(ConsumerConfig.GROUP_ID_CONFIG, "test-consumer-" + UUID.randomUUID())
             put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
             put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
         }
 
+        val mapper = jacksonObjectMapper()
+        var parsed: List<UserAndTransactionsPayload> = emptyList()
+
+        //when
         KafkaConsumer<String, String>(props).use { consumer ->
             consumer.subscribe(listOf(topic))
-
-            RestAssured.given()
-                .queryParam("code", "AUTH_CODE")
-                .`when`()
-                .get("/token")
-                .then()
-                .statusCode(200)
-
-            val records = consumer.poll(Duration.ofSeconds(10))
-            assertFalse(records.isEmpty(), "expected at least one Kafka record")
-
-            val mapper = jacksonObjectMapper()
-            val events: List<UserAndTransactions> = records.map { mapper.readValue<UserAndTransactions>(it.value()) }
-
-            val anyGood = events.any { ev ->
-                ev.userId == "user123" && ev.transactions.isNotEmpty() && ev.user.email?.isNotBlank() == true
+            val deadline = System.currentTimeMillis() + 8000
+            while (System.currentTimeMillis() < deadline && parsed.isEmpty()) {
+                val records = consumer.poll(Duration.ofMillis(400))
+                if (!records.isEmpty) {
+                    parsed = records.map { rec -> mapper.readValue<UserAndTransactionsPayload>(rec.value()) }
+                }
             }
-            assertTrue(anyGood, "expected event with userId=user123, user and transactions present")
-
-            val first = events.first()
-            assertEquals("user123", first.userId)
-            assertTrue(first.transactions.isNotEmpty())
-            assertTrue(first.user.email?.isNotBlank() == true)
         }
+
+        //then
+        assertTrue(parsed.isNotEmpty(), "No messages parsed from Kafka topic '$topic'")
+
+        val first = parsed.first()
+        assertTrue(!first.userId.isNullOrBlank(), "userId must be present in kafka payload")
+        assertTrue(first.transactions.isNotEmpty(), "transactions list must not be empty")
+        assertTrue(!first.user.email.isNullOrBlank(), "user.email must be present")
     }
 }

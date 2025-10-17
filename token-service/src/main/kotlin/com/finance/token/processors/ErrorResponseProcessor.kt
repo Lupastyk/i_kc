@@ -1,6 +1,6 @@
 package com.finance.token.processors
 
-import com.finance.token.model.TokenResponse
+import com.finance.token.model.response.TokenResponse
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named

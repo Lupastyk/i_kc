@@ -1,4 +1,4 @@
-package com.finance.token.model
+package com.finance.token.model.response
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
